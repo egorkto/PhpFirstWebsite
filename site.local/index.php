@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Hello
-    <?php
-    echo "sgsr";
-    ?>
-</body>
-</html>
+<?php
+
+define('APP_PATH', __DIR__);
+
+require_once APP_PATH.'/vendor/autoload.php';
+
+use App\App;
+
+$app = new App;
+$app->run();
