@@ -10,4 +10,15 @@ class MovieController extends Controller
     {
         $this->view('movies');
     }
+
+    public function add()
+    {
+        $this->view('admin/movies/add');
+    }
+
+    public function store()
+    {
+
+        dd('store');
+    }
 }
