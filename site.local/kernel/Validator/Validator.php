@@ -54,7 +54,7 @@ class Validator implements ValidatorInterface
                     return "Field $key must be at most $ruleValue characters long";
                 }
                 break;
-            case 'mail':
+            case 'email':
                 if (! filter_var($value, FILTER_VALIDATE_EMAIL)) {
                     return "Field $key must be a valid email address";
                 }
