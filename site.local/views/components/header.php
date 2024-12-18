@@ -6,7 +6,11 @@ $user = $auth->user();
 ?>
 
 <header>
-        <h3>User: <?php echo $user['email'] ?></h3>
-        <button>Logout</button>
-        <hr>
+        <?php if ($auth->check()) { ?>
+                <h3>User: <?php echo $user->email() ?></h3>
+                <form action="/logout" method="post">
+                        <button>Logout</button>
+                </form>
+                <hr>
+        <?php } ?>
 </header>
