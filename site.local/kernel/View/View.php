@@ -13,7 +13,7 @@ class View implements ViewInterface
         private AuthInterface $auth,
     ) {}
 
-    public function page(string $name)
+    public function page(string $name, array $data = [])
     {
         $viewPath = APP_PATH."/views/pages/$name.php";
 
@@ -21,11 +21,11 @@ class View implements ViewInterface
             throw new ViewNotFoundException("View $name not found");
         }
 
-        extract($this->defaultData());
+        extract(array_merge($this->defaultData(), $data));
         include_once $viewPath;
     }
 
-    public function component(string $name)
+    public function component(string $name, array $data = [])
     {
         $componentPath = APP_PATH."/views/components/$name.php";
 
@@ -35,9 +35,9 @@ class View implements ViewInterface
             return;
         }
 
-        extract($this->defaultData());
+        extract(array_merge($this->defaultData(), $data));
 
-        include_once APP_PATH."/views/components/$name.php";
+        include APP_PATH."/views/components/$name.php";
     }
 
     private function defaultData(): array

@@ -17,4 +17,7 @@ return [
     Route::get('/admin', [AdminController::class, 'index']),
     Route::get('/admin/categories/add', [CategoryController::class, 'create']),
     Route::post('/admin/categories/add', [CategoryController::class, 'store']),
+    Route::post('/admin/categories/destroy', [CategoryController::class, 'destroy']),
+    Route::post('/admin/categories/update', [CategoryController::class, 'update']),
+    Route::get('/admin/categories/update', [CategoryController::class, 'edit']),
 ];
