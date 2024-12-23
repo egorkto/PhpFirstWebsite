@@ -53,13 +53,19 @@ class Database implements DatabaseInterface
         return $result ?: null;
     }
 
-    public function get(string $table, array $conditions = []): array
+    public function get(string $table, array $conditions = [], array $order = [], $limit = -1): array
     {
         $where = '';
         if (count($conditions) > 0) {
             $where = 'WHERE '.implode(' AND ', array_map(fn ($field) => "$field = :$field", array_keys($conditions)));
         }
         $sql = "SELECT * FROM $table $where";
+        if (count($order) > 0) {
+            $sql .= ' ORDER BY '.implode(', ', array_map(fn ($field, $direction) => "$field $direction", array_keys($order), $order));
+        }
+        if ($limit > 0) {
+            $sql .= " LIMIT $limit";
+        }
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($conditions);
 
@@ -75,6 +81,19 @@ class Database implements DatabaseInterface
         $sql = "DELETE FROM $table $where";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($conditions);
+    }
+
+    public function update(string $table, array $data, array $conditions = []): void
+    {
+        $fields = array_keys($data);
+        $set = implode(', ', array_map(fn ($field) => "$field = :$field", $fields));
+        $where = '';
+        if (count($conditions) > 0) {
+            $where = 'WHERE '.implode(' AND ', array_map(fn ($field) => "$field = :$field", array_keys($conditions)));
+        }
+        $sql = "UPDATE  $table SET $set $where";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(array_merge($data, $conditions));
     }
 
     private function connect()
