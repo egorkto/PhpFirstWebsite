@@ -85,6 +85,12 @@ class MovieController extends Controller
         $this->redirect('/admin');
     }
 
+    public function show()
+    {
+        $movie = $this->service()->find($this->request()->input('id'));
+        $this->view('movie', ['movie' => $movie], $movie->name());
+    }
+
     private function service()
     {
         if (! isset($this->service)) {

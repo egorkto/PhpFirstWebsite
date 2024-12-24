@@ -10,6 +10,8 @@ class Movie
         private string $description,
         private string $preview,
         private int $categoryId,
+        private string $createdAt,
+        private array $reviews = []
     ) {}
 
     public function id(): int
@@ -35,5 +37,31 @@ class Movie
     public function categoryId(): int
     {
         return $this->categoryId;
+    }
+
+    public function created_at()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return array<Review>
+     */
+    public function reviews()
+    {
+        return $this->reviews;
+    }
+
+    public function avgRating()
+    {
+        $ratings = array_map(function (Review $review) {
+            return $review->rating();
+        }, $this->reviews);
+
+        if (count($ratings) === 0) {
+            return 0;
+        }
+
+        return round(array_sum($ratings) / count($ratings), 1);
     }
 }

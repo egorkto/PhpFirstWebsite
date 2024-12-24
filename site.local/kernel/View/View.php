@@ -9,14 +9,18 @@ use App\Kernel\Storage\StorageInterface;
 
 class View implements ViewInterface
 {
+    private string $title;
+
     public function __construct(
         private SessionInterface $session,
         private AuthInterface $auth,
         private StorageInterface $storage,
     ) {}
 
-    public function page(string $name, array $data = [])
+    public function page(string $name, array $data = [], string $title = '')
     {
+        $this->title = $title;
+
         $viewPath = APP_PATH."/views/pages/$name.php";
 
         if (! file_exists($viewPath)) {
@@ -40,6 +44,11 @@ class View implements ViewInterface
         extract(array_merge($this->defaultData(), $data));
 
         include APP_PATH."/views/components/$name.php";
+    }
+
+    public function title(): string
+    {
+        return $this->title;
     }
 
     private function defaultData(): array

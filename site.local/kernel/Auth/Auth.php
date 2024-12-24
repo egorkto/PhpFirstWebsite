@@ -65,6 +65,11 @@ class Auth implements AuthInterface
         return null;
     }
 
+    public function id(): ?int
+    {
+        return $this->session->get($this->sessionField());
+    }
+
     public function table(): string
     {
         return $this->config->get('auth.table', 'users');

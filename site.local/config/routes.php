@@ -6,6 +6,7 @@ use App\Controllers\HomeController;
 use App\Controllers\LoginController;
 use App\Controllers\MovieController;
 use App\Controllers\RegisterController;
+use App\Controllers\ReviewController;
 use App\Kernel\Router\Route;
 
 return [
@@ -26,4 +27,6 @@ return [
     Route::post('/admin/movies/destroy', [MovieController::class, 'destroy']),
     Route::post('/admin/movies/update', [MovieController::class, 'update']),
     Route::get('/admin/movies/update', [MovieController::class, 'edit']),
+    Route::get('/movie', [MovieController::class, 'show']),
+    Route::post('/reviews/add', [ReviewController::class, 'store']),
 ];

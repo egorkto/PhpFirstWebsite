@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Kernel\Auth\User;
 use App\Kernel\Database\DatabaseInterface;
 use App\Kernel\Upload\UploadedFileInterface;
 use App\Models\Movie;
+use App\Models\Review;
 
 class MovieService
 {
@@ -34,6 +36,7 @@ class MovieService
                 $movie['description'],
                 $movie['preview'],
                 $movie['category_id'],
+                $movie['created_at']
             );
         }, $movies);
 
@@ -60,6 +63,8 @@ class MovieService
             $movie['description'],
             $movie['preview'],
             $movie['category_id'],
+            $movie['created_at'],
+            $this->getReviews($id)
         );
     }
 
@@ -69,6 +74,7 @@ class MovieService
             'name' => $name,
             'description' => $description,
             'category_id' => $categoryId,
+
         ];
         if ($image && ! $image->hasErrors()) {
             $data['preview'] = $image->move('movies');
@@ -90,7 +96,38 @@ class MovieService
                 $movie['description'],
                 $movie['preview'],
                 $movie['category_id'],
+                $movie['created_at'],
+                $this->getReviews($movie['id']),
             );
         }, $movie);
+    }
+
+    private function getReviews(int $id)
+    {
+        $reviews = $this->db->get('reviews', [
+            'movie_id' => $id,
+        ], ['id' => 'DESC']);
+
+        return array_map(function ($review) {
+            $user = $this->db->first('users', [
+                'id' => $review['user_id'],
+            ]);
+
+            $user = new User(
+                $user['id'],
+                $user['name'],
+                $user['email'],
+                $user['password'],
+            );
+
+            return new Review(
+                $review['id'],
+                $review['rating'],
+                $review['review'],
+                $review['created_at'],
+                $user
+            );
+        }, $reviews);
+
     }
 }
